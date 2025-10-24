@@ -1,0 +1,17 @@
+# .gitignore
+
+# Python
+__pycache__/
+venv/
+*.pyc
+.env
+
+# Node
+node_modules/
+.DS_Store
+build/
+.npm
+npm-debug.log
+
+# Editor
+.vscode/
