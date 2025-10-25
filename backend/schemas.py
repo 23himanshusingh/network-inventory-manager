@@ -10,6 +10,15 @@ class UserRole(str, Enum):
     Admin = 'Admin'
     SupportAgent = 'SupportAgent'
 
+class AssetType(str, Enum):
+    ONT = 'ONT'
+    Router = 'Router'
+    Splitter = 'Splitter'
+    FDH = 'FDH'
+    Switch = 'Switch'
+    CPE = 'CPE'
+    FiberRoll = 'FiberRoll'
+
 class AssetStatus(str, Enum):
     Available = 'Available'
     Assigned = 'Assigned'
@@ -21,7 +30,7 @@ class CustomerStatus(str, Enum):
     Inactive = 'Inactive'
     Pending = 'Pending'
 
-# --- User Schemas ---
+# --- User Schemas (Unchanged) ---
 class UserBase(BaseModel):
     username: str
     role: UserRole
@@ -36,16 +45,7 @@ class User(UserBase):
     class Config:
         from_attributes = True
 
-# --- Asset Schemas ---
-class AssetType(str, Enum):
-    ONT = 'ONT'
-    Router = 'Router'
-    Splitter = 'Splitter'
-    FDH = 'FDH'
-    Switch = 'Switch'
-    CPE = 'CPE'
-    FiberRoll = 'FiberRoll'
-
+# --- Asset Schemas (Updated) ---
 class AssetBase(BaseModel):
     asset_type: AssetType
     model: str
@@ -53,16 +53,23 @@ class AssetBase(BaseModel):
     location: Optional[str] = None
 
 class AssetCreate(AssetBase):
-    pass
+    # Pass status on creation, default to Available
+    status: AssetStatus = AssetStatus.Available
+
+class AssetUpdate(BaseModel):
+    # Define fields that are allowed to be updated
+    model: Optional[str] = None
+    status: Optional[AssetStatus] = None
+    location: Optional[str] = None
 
 class Asset(AssetBase):
     asset_id: int
     status: AssetStatus
-
+    
     class Config:
         from_attributes = True
 
-# --- Customer Schemas ---
+# --- Customer Schemas (Unchanged) ---
 class CustomerBase(BaseModel):
     name: str
     address: str
@@ -81,7 +88,7 @@ class Customer(CustomerBase):
     class Config:
         from_attributes = True
 
-# --- Hierarchy Schemas ---
+# --- Hierarchy Schemas (Updated) ---
 class SplitterBase(BaseModel):
     model: str
     port_capacity: int
@@ -116,3 +123,35 @@ class FDH(FDHBase):
     
     class Config:
         from_attributes = True
+
+# --- New Headend Schemas ---
+class HeadendBase(BaseModel):
+    name: str
+    location: Optional[str] = None
+
+class HeadendCreate(HeadendBase):
+    pass
+
+class Headend(HeadendBase):
+    headend_id: int
+    # Show nested FDHs
+    fdhs: List[FDH] = [] 
+
+    class Config:
+        from_attributes = True
+
+class SplitterUpdate(BaseModel):
+    location: Optional[str] = None
+    fdh_id: Optional[int] = None
+    # We don't allow changing model/port_capacity, 
+    # as that would be a replacement, not an update.
+
+class FDHUpdate(BaseModel):
+    name: Optional[str] = None
+    location: Optional[str] = None
+    region: Optional[str] = None
+    max_ports: Optional[int] = None
+
+class HeadendUpdate(BaseModel):
+    name: Optional[str] = None
+    location: Optional[str] = None

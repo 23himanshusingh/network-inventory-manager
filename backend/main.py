@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from database import engine
 import models
-from routers import assets, customers # Import routers
+from routers import assets, customers, hierarchy # Import hierarchy
 from fastapi.middleware.cors import CORSMiddleware
 
 # Create all database tables on startup
@@ -14,25 +14,21 @@ app = FastAPI(
 )
 
 # --- Middleware ---
-# Setup CORS to allow our Vite frontend to make requests
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost:5173", # Vite default port
+        "http://localhost:5173", 
         "http://127.0.0.1:5173",
     ],
     allow_credentials=True,
-    allow_methods=["*"], # Allow all methods
-    allow_headers=["*"], # Allow all headers
+    allow_methods=["*"], 
+    allow_headers=["*"], 
 )
 
-
 # --- API Routers ---
-# Include the API endpoints from other files
 app.include_router(assets.router)
 app.include_router(customers.router)
-# Add other routers here (e.g., tasks, users)
-
+app.include_router(hierarchy.router) # Add the new hierarchy router
 
 # --- Root Endpoint ---
 @app.get("/", tags=["Root"])

@@ -11,18 +11,18 @@ import App from './App.jsx'
 import Dashboard from './components/Dashboard.jsx'
 import CustomerList from './components/CustomerList.jsx'
 import AssetList from './components/AssetList.jsx'
+import AssetForm from './components/AssetForm.jsx' // Import new form
+import NetworkHierarchy from './components/NetworkHierarchy.jsx' // Import new page
 import TaskList from './components/TaskList.jsx'
-// import ErrorPage from './ErrorPage.jsx'; // Good to add later
 
 // Define the application routes
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />, // App.jsx is the root layout
-    // errorElement: <ErrorPage />, // You can add an error boundary here
+    element: <App />, 
     children: [
       {
-        index: true, // Renders Dashboard at the root path "/"
+        index: true, 
         element: <Dashboard />,
       },
       {
@@ -32,6 +32,18 @@ const router = createBrowserRouter([
       {
         path: "assets",
         element: <AssetList />,
+      },
+      {
+        path: "assets/new", // Add Asset route
+        element: <AssetForm />,
+      },
+      {
+        path: "assets/edit/:assetId", // Edit Asset route
+        element: <AssetForm />,
+      },
+      {
+        path: "network-hierarchy", // Add Network route
+        element: <NetworkHierarchy />,
       },
       {
         path: "tasks",
