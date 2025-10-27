@@ -1,10 +1,11 @@
 from fastapi import FastAPI
 from database import engine
 import models
-from routers import assets, customers, hierarchy # Import hierarchy
+from routers import assets, customers, hierarchy ,topology
 from fastapi.middleware.cors import CORSMiddleware
 
-# Create all database tables on startup
+
+
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
@@ -29,6 +30,7 @@ app.add_middleware(
 app.include_router(assets.router)
 app.include_router(customers.router)
 app.include_router(hierarchy.router) # Add the new hierarchy router
+app.include_router(topology.router)
 
 # --- Root Endpoint ---
 @app.get("/", tags=["Root"])

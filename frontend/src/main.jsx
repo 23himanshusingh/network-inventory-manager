@@ -1,9 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
+import {createBrowserRouter,RouterProvider,} from "react-router-dom";
 import './index.css'
 
 // Import the layout and page components
@@ -14,6 +11,8 @@ import AssetList from './components/AssetList.jsx'
 import AssetForm from './components/AssetForm.jsx' // Import new form
 import NetworkHierarchy from './components/NetworkHierarchy.jsx' // Import new page
 import TaskList from './components/TaskList.jsx'
+import TopologyViewer from './components/TopologyViewer.jsx'; // Import new page
+
 
 // Define the application routes
 const router = createBrowserRouter([
@@ -44,6 +43,10 @@ const router = createBrowserRouter([
       {
         path: "network-hierarchy", // Add Network route
         element: <NetworkHierarchy />,
+      },
+      {
+        path: "topology", // Add new topology route
+        element: <TopologyViewer />,
       },
       {
         path: "tasks",
